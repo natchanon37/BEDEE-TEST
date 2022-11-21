@@ -31,30 +31,32 @@ router.post("/add", (req, res) => {
 /*Deleted todo */
 router.delete("/delete/:id", (req, res) => {
   const id = req.params.id;
-  if (id > todos.length) {
-    res.json("Could not find user");
-  }
-  const deleted = todos.findIndex((todo) => todo.id == id);
-  todos.splice(deleted, 1);
+  todos = todos.filter((todo) => {
+    return todo.id != id;
+  });
   res.json(todos);
 });
 
 /*Mark as Completed */
 router.put("/completed/:id", (req, res) => {
   const id = req.params.id;
-  if (id > todos.length) {
-    res.json("Could not find user");
-  }
+  let update = false;
   for (const i of todos) {
     if (i.id == id) {
       if (i.completed == false) {
+        update = true;
         i.completed = true;
+        res.json(todos);
       } else {
+        update = true;
         i.completed = false;
+        res.json(todos);
       }
     }
   }
-  res.json(todos);
+  if (update == false) {
+    res.json("could not find user");
+  }
 });
 
 module.exports = router;
