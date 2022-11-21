@@ -110,17 +110,16 @@ The REST API to the example app is described below.
     	"completed": false
     },
     {
-    	"id": 2,
-    	"title": "Order Tsunagimo",
-    	"completed": false
-    },
-    {
     	"id": 3,
     	"title": "Order Nankotsu",
     	"completed": false
+    },
+    {
+    	"id": 4,
+    	"title": "Go to shibuya",
+    	"completed": false
     }
-
-]
+    ]
 
 ## Update todo-list when todo is completed
 
