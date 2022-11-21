@@ -1,5 +1,4 @@
 const express = require("express");
-const bodyParser = require("body-parser");
 const router = express.Router();
 
 let todos = [
@@ -8,70 +7,54 @@ let todos = [
   { id: 3, title: "Order Nankotsu", completed: false },
 ];
 
-function MockPostMethod() {
-  router.get("/add", (req, res) => {
-    const todo = {
-      id: todos.length + 1,
-      title: "add test",
-      completed: false,
-    };
-    todos.push(todo);
-    res.json(todos);
-  });
-}
-
-function MockDeleteMethod(id) {
-  router.get("/delete", (req, res) => {
-    const found = todos.some((el) => el.id === id);
-    console.log(found);
-    if (!found) {
-      res.json("Could not find the user");
-    }
-    const deleted = todos.findIndex((todo) => todo.id == id);
-    todos.splice(deleted, 1);
-    res.json(todos);
-  });
-}
-
-function MockIsCompleted(id) {
-  let completed = [];
-  router.get("/completed", (req, res) => {
-    const found = todos.some((el) => el.id === id);
-    console.log(found);
-    if (!found) {
-      res.json("Could not find the user");
-    }
-
-    for (const i of todos) {
-      if (i.id == id) {
-        if (i.completed == false) {
-          i.completed = true;
-        } else {
-          i.completed = false;
-        }
-      }
-    }
-    res.json(todos);
-  });
-}
-
-//api page interface
-router.get("/alltodo", (req, res) => {
-  res.json(todos);
-});
-
-//api page interface
+/*Api Interface */
 router.get("/", (req, res) => {
   res.send("API Started");
 });
 
-//Add Todo
-MockPostMethod();
+/*Get All todo */
+router.get("/alltodo", (req, res) => {
+  res.json(todos);
+});
 
-//Delete Todo
-MockDeleteMethod(1);
+/*Add todo */
+router.post("/add", (req, res) => {
+  const todo = {
+    id: todos.length + 1,
+    title: req.body.title,
+    completed: req.body.completed,
+  };
+  todos.push(todo);
+  res.json(todos);
+});
 
-//UpdateTodo
-MockIsCompleted(1);
+/*Deleted todo */
+router.delete("/delete/:id", (req, res) => {
+  const id = req.params.id;
+  if (id > todos.length) {
+    res.json("Could not find user");
+  }
+  const deleted = todos.findIndex((todo) => todo.id == id);
+  todos.splice(deleted, 1);
+  res.json(todos);
+});
+
+/*Mark as Completed */
+router.put("/completed/:id", (req, res) => {
+  const id = req.params.id;
+  if (id > todos.length) {
+    res.json("Could not find user");
+  }
+  for (const i of todos) {
+    if (i.id == id) {
+      if (i.completed == false) {
+        i.completed = true;
+      } else {
+        i.completed = false;
+      }
+    }
+  }
+  res.json(todos);
+});
 
 module.exports = router;
