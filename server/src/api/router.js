@@ -30,7 +30,7 @@ router.post("/add", (req, res) => {
 
 /*Deleted todo */
 router.delete("/delete/:id", (req, res) => {
-  const id = req.params.id;
+  const id = parseInt(req.params.id);
   todos = todos.filter((todo) => {
     return todo.id != id;
   });
@@ -39,7 +39,7 @@ router.delete("/delete/:id", (req, res) => {
 
 /*Mark as Completed */
 router.put("/completed/:id", (req, res) => {
-  const id = req.params.id;
+  const id = parseInt(req.params.id);
   let update = false;
   for (const i of todos) {
     if (i.id == id) {
